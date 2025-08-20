@@ -57,3 +57,9 @@ export async function getTalentById(id: number) {
         include: talentInclude,
     });
 }
+
+export async function deleteTalentById(id: number) {
+    return await prisma.talento.deleteMany({
+        where: { id },
+    });
+}
