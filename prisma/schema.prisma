@@ -48,7 +48,7 @@ model Interaccion {
   fechaDeModificacion DateTime?         @updatedAt
   talentoId           Int
 
-  talento Talento @relation(fields: [talentoId], references: [id])
+  talento Talento @relation(fields: [talentoId], references: [id], onDelete: Cascade)
 }
 
 enum EstadoTalento {
