@@ -1,6 +1,8 @@
 import { NextResponse, NextRequest } from 'next/server';
+import { ZodError } from 'zod';
 
-import { getAllTalents } from '@/lib/services/talent';
+import { createTalentSchema } from '@/lib/validations/talent';
+import { getAllTalents, createTalent } from '@/lib/services/talent';
 
 export async function GET(req: NextRequest) {
     try {
@@ -30,6 +32,30 @@ export async function GET(req: NextRequest) {
         return NextResponse.json(talents, { status: 200 });
     } catch (error) {
         console.error('Error al buscar talentos:', error);
+        return NextResponse.json({ message: 'Error interno del servidor' }, { status: 500 });
+    }
+}
+
+export async function POST(req: NextRequest) {
+    try {
+        const body = await req.json();
+        const parsedData = createTalentSchema.parse(body);
+
+        const newTalent = await createTalent(parsedData);
+
+        return NextResponse.json(
+            {
+                message: 'Talento creado correctamente',
+                data: newTalent,
+            },
+            { status: 201 },
+        );
+    } catch (error) {
+        if (error instanceof ZodError) {
+            const errorMessages = error.issues.map((e) => e.message);
+            return NextResponse.json({ message: 'Datos inválidos', errors: errorMessages }, { status: 400 });
+        }
+        console.error('Error creando talento:', error);
         return NextResponse.json({ message: 'Error interno del servidor' }, { status: 500 });
     }
 }

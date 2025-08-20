@@ -1,4 +1,4 @@
-import { EstadoTalento } from '@/generated/prisma';
+import { EstadoTalento, Prisma } from '@/generated/prisma';
 
 export interface GetAllTalentsParams {
     page?: number;
@@ -9,3 +9,5 @@ export interface GetAllTalentsParams {
     role?: string;
     status?: EstadoTalento;
 }
+
+export type CreateTalentInput = Prisma.TalentoCreateInput;
