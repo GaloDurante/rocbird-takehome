@@ -7,16 +7,57 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+model Talento {
+  id              Int           @id @default(autoincrement())
+  nombreYApellido String
+  seniority       String
+  rol             String
+  estado          EstadoTalento @default(ACTIVO)
+  interacciones   Interaccion[]
+  liderId         Int?
+  mentorId        Int?
 
-// schema
+  lider  ReferenteTecnico? @relation("LiderTalentos", fields: [liderId], references: [id])
+  mentor ReferenteTecnico? @relation("MentorTalentos", fields: [mentorId], references: [id])
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-// definir schemas de users y posts
-// tener todo tipado (types.ts)
+model ReferenteTecnico {
+  id              Int    @id @default(autoincrement())
+  nombreYApellido String
 
+  talentosLiderados   Talento[] @relation("LiderTalentos")
+  talentosMentoreados Talento[] @relation("MentorTalentos")
 
-// post, get, patch/update (typo date)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Interaccion {
+  id                  Int               @id @default(autoincrement())
+  tipoDeInteraccion   String
+  fecha               DateTime          @default(now())
+  detalle             String?
+  estado              EstadoInteraccion @default(INICIADA)
+  fechaDeModificacion DateTime?         @updatedAt
+  talentoId           Int
+
+  talento Talento @relation(fields: [talentoId], references: [id])
+}
+
+enum EstadoTalento {
+  ACTIVO   @map("activo")
+  INACTIVO @map("inactivo")
+}
+
+enum EstadoInteraccion {
+  INICIADA    @map("Iniciada")
+  EN_PROGRESO @map("En Progreso")
+  FINALIZADA  @map("Finalizada")
+}
