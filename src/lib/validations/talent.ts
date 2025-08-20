@@ -7,3 +7,5 @@ export const createTalentSchema = z.object({
     rol: z.string('Rol inválido').nonempty('Rol es requerido'),
     estado: z.enum(EstadoTalento, 'Estado inválido. Por favor selecciona ACTIVO o INACTIVO').optional(),
 });
+
+export const updateTalentSchema = createTalentSchema.partial();

@@ -11,3 +11,4 @@ export interface GetAllTalentsParams {
 }
 
 export type CreateTalentInput = Prisma.TalentoCreateInput;
+export type UpdateTalentInput = Prisma.TalentoUpdateInput;

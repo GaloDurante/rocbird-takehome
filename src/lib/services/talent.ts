@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { GetAllTalentsParams, CreateTalentInput } from '@/types/talent';
+import { GetAllTalentsParams, CreateTalentInput, UpdateTalentInput } from '@/types/talent';
 
 const talentInclude = {
     lider: {
@@ -66,6 +66,13 @@ export async function deleteTalentById(id: number) {
 
 export async function createTalent(data: CreateTalentInput) {
     return await prisma.talento.create({
+        data,
+    });
+}
+
+export async function updatedTalentById(id: number, data: UpdateTalentInput) {
+    return await prisma.talento.update({
+        where: { id },
         data,
     });
 }
