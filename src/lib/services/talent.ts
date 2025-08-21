@@ -37,7 +37,7 @@ export async function getAllTalents({
         ...(name ? { nombreYApellido: { contains: name, mode: 'insensitive' as const } } : {}),
         ...(seniority ? { seniority: { equals: seniority, mode: 'insensitive' as const } } : {}),
         ...(role ? { rol: { equals: role, mode: 'insensitive' as const } } : {}),
-        ...(status ? { status } : {}),
+        ...(status ? { estado: status } : {}),
     };
 
     return prisma.talento.findMany({

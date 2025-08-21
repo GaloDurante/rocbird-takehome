@@ -10,5 +10,30 @@ export interface GetAllTalentsParams {
     status?: EstadoTalento;
 }
 
+export type TalentType = Prisma.TalentoGetPayload<{
+    include: {
+        lider: {
+            select: {
+                id: true;
+                nombreYApellido: true;
+            };
+        };
+        mentor: {
+            select: {
+                id: true;
+                nombreYApellido: true;
+            };
+        };
+        interacciones: {
+            select: {
+                id: true;
+                tipoDeInteraccion: true;
+                estado: true;
+                fecha: true;
+            };
+        };
+    };
+}>;
+
 export type CreateTalentInput = Prisma.TalentoCreateInput;
 export type UpdateTalentInput = Prisma.TalentoUpdateInput;
