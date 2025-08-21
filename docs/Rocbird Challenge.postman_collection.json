@@ -1,0 +1,169 @@
+{
+	"info": {
+		"_postman_id": "73c45021-7f4c-401c-b100-0f626542db77",
+		"name": "Rocbird Challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27281741"
+	},
+	"item": [
+		{
+			"name": "Talento",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/talentos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"talentos"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "desc",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Juan",
+									"disabled": true
+								},
+								{
+									"key": "seniority",
+									"value": "Junior",
+									"disabled": true
+								},
+								{
+									"key": "estado",
+									"value": "ACTIVO",
+									"disabled": true
+								},
+								{
+									"key": "rol",
+									"value": "Backend Developer",
+									"disabled": true
+								}
+							]
+						},
+						"description": "# GET All talents\n\n## Overview\n\nThe `/api/talentos` endpoint is used to retrieve a list of talent profiles from the system. This endpoint provides detailed information about each talent, including their identification, roles, status, and associated interactions.\n\n## Request Method\n\n- **GET**\n    \n\n## Expected Response\n\nUpon a successful request, the endpoint will return a `200 OK` status along with a JSON array containing the details of the talents. Each talent object includes the following fields:\n\n- **id** (integer): The unique identifier for the talent.\n- **nombreYApellido** (string): The full name of the talent.\n- **seniority** (string): The seniority level of the talent.\n- **rol** (string): The role of the talent within the organization.\n- **estado** (string): The current status of the talent.\n- **liderId** (integer): The identifier for the leader associated with the talent.\n- **mentorId** (integer): The identifier for the mentor associated with the talent.\n- **createdAt** (string): The timestamp of when the talent was created.\n- **updatedAt** (string): The timestamp of the last update made to the talent profile.\n- **lider** (object): An object containing details about the leader, which includes:\n    - **id** (integer): The unique identifier for the leader.\n    - **nombreYApellido** (string): The full name of the leader.\n- **mentor** (object): An object containing details about the mentor, which includes:\n    - **id** (integer): The unique identifier for the mentor.\n    - **nombreYApellido** (string): The full name of the mentor.\n- **interacciones** (array): An array of interaction objects associated with the talent, where each interaction includes:\n    - **id** (integer): The unique identifier for the interaction.\n    - **tipoDeInteraccion** (string): The type of interaction.\n    - **estado** (string): The status of the interaction.\n    - **fecha** (string): The date of the interaction.\n\n## Query Parameters\n\nStartFragment\n\n| Parameter | Type | Required | Default | Description | Example |\n| --- | --- | --- | --- | --- | --- |\n| `page` | integer | No | `1` | The page number for pagination. Works together with `limit` to determine offset. | `/api/talentos?page=2` |\n| `limit` | integer | No | `10` | The number of talents returned per page. | `/api/talentos?limit=20` |\n| `sort` | string | No | `asc` | Sorting order by the `nombreYApellido` field. Allowed values: `asc`, `desc`. | `/api/talentos?sort=desc` |\n| `name` | string | No | — | Filters talents whose `nombreYApellido` contains the specified value (case-insensitive). | `/api/talentos?name=juan` |\n| `seniority` | string | No | — | Filters talents by seniority level (case-insensitive). | `/api/talentos?seniority=Senior` |\n| `role` | string | No | — | Filters talents by role (case-insensitive). | `/api/talentos?role=Backend` |\n| `status` | string | No | — | Filters talents by status. Allowed values: `activo`, `inactivo`. | `/api/talentos?status=activo` |\n\n## Example Response\n\n``` json\n[\n  {\n    \"id\": 0,\n    \"nombreYApellido\": \"\",\n    \"seniority\": \"\",\n    \"rol\": \"\",\n    \"estado\": \"\",\n    \"liderId\": 0,\n    \"mentorId\": 0,\n    \"createdAt\": \"\",\n    \"updatedAt\": \"\",\n    \"lider\": {\n      \"id\": 0,\n      \"nombreYApellido\": \"\"\n    },\n    \"mentor\": {\n      \"id\": 0,\n      \"nombreYApellido\": \"\"\n    },\n    \"interacciones\": [\n      {\n        \"id\": 0,\n        \"tipoDeInteraccion\": \"\",\n        \"estado\": \"\",\n        \"fecha\": \"\"\n      }\n    ]\n  }\n]\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "getById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/talentos/6",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"talentos",
+								"6"
+							]
+						},
+						"description": "### GET Talent Details\n\nThis endpoint retrieves detailed information about a specific talent identified by the unique ID provided in the URL.\n\n#### Request\n\n- **Method**: GET\n- **URL**: `{{url}}/api/talentos/{id}`\n- **Path Parameter**:\n    - `id` (integer): The unique identifier of the talent you wish to retrieve.\n\n#### Response\n\n- **Status Code**: 200 OK\n- **Content-Type**: application/json\n- **Response Body**:\n    - `id` (integer): The unique identifier of the talent.\n    - `nombreYApellido` (string): The full name of the talent.\n    - `seniority` (string): The seniority level of the talent.\n    - `rol` (string): The role of the talent.\n    - `estado` (string): The current status of the talent.\n    - `liderId` (integer): The ID of the talent's leader.\n    - `mentorId` (integer): The ID of the talent's mentor.\n    - `createdAt` (string): Timestamp of when the talent was created.\n    - `updatedAt` (string): Timestamp of the last update to the talent's information.\n    - `lider` (object): An object containing details about the leader of the talent, including:\n        - `id` (integer): The unique identifier of the leader.\n        - `nombreYApellido` (string): The full name of the leader.\n    - `mentor` (object): An object containing details about the mentor of the talent, including:\n        - `id` (integer): The unique identifier of the mentor.\n        - `nombreYApellido` (string): The full name of the mentor.\n    - `interacciones` (array): A list of interactions related to the talent, where each interaction includes:\n        - `id` (integer): The unique identifier of the interaction.\n        - `tipoDeInteraccion` (string): The type of interaction.\n        - `estado` (string): The current status of the interaction.\n        - `fecha` (string): The date of the interaction.\n\nThis endpoint is essential for obtaining comprehensive details about a talent, including their leadership and mentorship relationships, as well as their interaction history."
+					},
+					"response": []
+				},
+				{
+					"name": "deleteById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/talentos/13",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"talentos",
+								"13"
+							]
+						},
+						"description": "## DELETE Talent Endpoint\n\nThis endpoint is used to delete a specific talent entry identified by its unique ID.\n\n### Request\n\n- **Method**: GET\n- **URL**: `{{url}}/api/talentos/{id}`\n- **Path Parameter**:\n    - `id` (integer): The unique identifier of the talent you wish to delete.\n\n### Expected Response\n\n- **Status Code**: `200 OK` - Indicates that the request was successful.\n- **Content-Type**: `application/json`\n- **Response Body**:\n    - `message`: A message indicating the result of the deletion operation (may be empty).\n    - `deletedCount`: A count of the number of records deleted. A value of `0` indicates that no records were found or deleted.\n\n### Notes\n\n- Ensure that the ID provided in the request corresponds to an existing talent entry. If no entry is found, the `deletedCount` will reflect this by returning `0`.\n- The response may include a message for additional context, but it is not guaranteed to contain any information."
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombreYApellido\": \"Franco Mesa\",\r\n    \"seniority\": \"Junior\",\r\n    \"rol\": \"Designer\",\r\n    \"estado\": \"ACTIVO\",\r\n    \"liderId\": 5,\r\n    \"mentorId\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/talentos",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"talentos"
+							]
+						},
+						"description": "## Add Talent Endpoint\n\nThis endpoint allows you to add a new talent record to the system.\n\n### HTTP Method\n\n`POST`\n\n### Endpoint\n\n`{{url}}/api/talentos`\n\n### Request Body\n\nThe request body must be sent in JSON format and should include the following parameters:\n\n- **nombreYApellido** (string): The full name of the talent.\n- **seniority** (string): The seniority level of the talent (e.g., Junior, Senior).\n- **rol** (string): The role of the talent (e.g., Designer, Developer).\n- **estado** (string): The status of the talent (e.g., ACTIVO for active). (OPTIONAL)\n- **liderId** (integer): The ID of the leader associated with the talent. (OPTIONAL)\n- **mentorId** (integer): The ID of the mentor associated with the talent. (OPTIONAL)\n    \n\n### Example Request\n\n``` json\n{\n  \"nombreYApellido\": \"Franco Mesa\",\n  \"seniority\": \"Junior\",\n  \"rol\": \"Designer\",\n  \"estado\": \"ACTIVO\",\n  \"liderId\": 5,\n  \"mentorId\": 5\n}\n\n ```\n\n### Response\n\nOn a successful request, the server will respond with a `201 Created` status code and a JSON response containing the following structure:\n\n- **message** (string): A message indicating the result of the operation (may be empty).\n- **data** (object): An object containing the details of the created talent record:\n    - **id** (integer): The unique identifier for the newly created talent.\n    - **nombreYApellido** (string): The full name of the talent.\n    - **seniority** (string): The seniority level of the talent.\n    - **rol** (string): The role of the talent.\n    - **estado** (string): The status of the talent.\n    - **liderId** (integer): The ID of the leader associated with the talent.\n    - **mentorId** (integer): The ID of the mentor associated with the talent.\n    - **createdAt** (string): Timestamp indicating when the talent was created.\n    - **updatedAt** (string): Timestamp indicating when the talent was last updated.\n\n### Example Response\n\n``` json\n{\n  \"message\": \"\",\n  \"data\": {\n    \"id\": 0,\n    \"nombreYApellido\": \"\",\n    \"seniority\": \"\",\n    \"rol\": \"\",\n    \"estado\": \"\",\n    \"liderId\": 0,\n    \"mentorId\": 0,\n    \"createdAt\": \"\",\n    \"updatedAt\": \"\"\n  }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "updateById",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombreYApellido\": \"Matias Cardozo\",\r\n    \"seniority\": \"Junior\",\r\n    \"rol\": \"Developer\",\r\n    \"estado\": \"ACTIVO\",\r\n    \"liderId\": 1,\r\n    \"mentorId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/talentos/99",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"talentos",
+								"99"
+							]
+						},
+						"description": "### Update Talent Information\n\nThis endpoint allows you to update the information of a specific talent in the system. The talent is identified by their unique ID, which is included in the URL path.\n\n#### Request\n\n- **Method**: PUT\n- **URL**: `{{url}}/api/talentos/{id}`\n    \n\n#### Request Body\n\nThe request body must be sent in JSON format and should include the following fields:\n\n- **nombreYApellido** (string): The full name of the talent. (OPTIONAL)\n    \n- **seniority** (string): The seniority level of the talent (e.g., Junior, Mid, Senior). (OPTIONAL)\n    \n- **rol** (string): The role of the talent (e.g., Developer, Designer). (OPTIONAL)\n    \n- **estado** (string): The current status of the talent (e.g., ACTIVO | INACTIVO). (OPTIONAL)\n    \n- **liderId** (integer): The ID of the leader associated with the talent. (OPTIONAL)\n    \n- **mentorId** (integer): The ID of the mentor associated with the talent. (OPTIONAL)\n    \n\n#### Example Request Body\n\n``` json\n{\n  \"nombreYApellido\": \"Matias Cardozo\",\n  \"seniority\": \"Junior\",\n  \"rol\": \"Developer\",\n  \"estado\": \"ACTIVO\",\n  \"liderId\": 1,\n  \"mentorId\": 1\n}\n\n ```\n\n#### Response\n\nUpon successful completion of the request, the server will return a response indicating the result of the update operation. The structure of the response may vary, but it typically includes:\n\n- A confirmation message or status indicating that the update was successful.\n- The updated talent information reflecting the changes made.\n    \n\nEnsure that you handle any potential error responses appropriately, which may include validation errors or issues with the provided IDs."
+					},
+					"response": []
+				}
+			],
+			"description": "All the endpoints associated with \"Talento\" model."
+		}
+	]
+}
