@@ -13,10 +13,10 @@ export default function TalentsTable({ talents }: TalentsTableProps) {
         <Table>
             <TableHeader>
                 <TableRow className="bg-muted/30">
-                    <TableHead>Name</TableHead>
+                    <TableHead>Nombre completo</TableHead>
                     <TableHead>Seniority</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Rol</TableHead>
+                    <TableHead>Estado</TableHead>
                     <TableHead>Lider asociado</TableHead>
                     <TableHead>Mentor asociado</TableHead>
                     <TableHead>Interacciones</TableHead>
