@@ -76,10 +76,15 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
             return NextResponse.json({ message: 'Datos inválidos', errors: errorMessages }, { status: 400 });
         }
 
-        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code == 'P2025') {
-            return NextResponse.json({ message: 'Talento no encontrado' }, { status: 404 });
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            if (error.code === 'P2025') {
+                return NextResponse.json({ message: 'Talento no encontrado' }, { status: 404 });
+            }
+            if (error.code === 'P2003') {
+                return NextResponse.json({ message: 'El líder o mentor especificado no existe' }, { status: 400 });
+            }
         }
-
+        console.error('Error actualizando talento:', error);
         return NextResponse.json({ message: 'Error interno del servidor' }, { status: 500 });
     }
 }

@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { ZodError } from 'zod';
+import { Prisma } from '@/generated/prisma';
 
 import { createTalentSchema } from '@/lib/validations/talent';
 import { getAllTalents, createTalent } from '@/lib/services/talent';
@@ -54,6 +55,10 @@ export async function POST(req: NextRequest) {
         if (error instanceof ZodError) {
             const errorMessages = error.issues.map((e) => e.message);
             return NextResponse.json({ message: 'Datos inválidos', errors: errorMessages }, { status: 400 });
+        }
+
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code == 'P2003') {
+            return NextResponse.json({ message: 'El líder o mentor especificado no existe' }, { status: 400 });
         }
         console.error('Error creando talento:', error);
         return NextResponse.json({ message: 'Error interno del servidor' }, { status: 500 });
