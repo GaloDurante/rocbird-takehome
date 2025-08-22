@@ -69,7 +69,7 @@ export default function Filters() {
                 <SelectContent>
                     <SelectGroup>
                         <SelectLabel>Seniority</SelectLabel>
-                        <SelectItem value="all">Todos</SelectItem>
+                        {searchParams.get('seniority') && <SelectItem value="all">Todos</SelectItem>}
                         <SelectItem value="Junior">Junior</SelectItem>
                         <SelectItem value="Semi Senior">Semi Senior</SelectItem>
                         <SelectItem value="Senior">Senior</SelectItem>
@@ -90,7 +90,7 @@ export default function Filters() {
                 <SelectContent>
                     <SelectGroup>
                         <SelectLabel>Rol</SelectLabel>
-                        <SelectItem value="all">Todos</SelectItem>
+                        {searchParams.get('role') && <SelectItem value="all">Todos</SelectItem>}
                         <SelectItem value="Developer">Developer</SelectItem>
                         <SelectItem value="Designer">Designer</SelectItem>
                         <SelectItem value="QA">QA</SelectItem>
@@ -111,7 +111,7 @@ export default function Filters() {
                 <SelectContent>
                     <SelectGroup>
                         <SelectLabel>Estado</SelectLabel>
-                        <SelectItem value="all">Todos</SelectItem>
+                        {searchParams.get('status') && <SelectItem value="all">Todos</SelectItem>}
                         <SelectItem value="ACTIVO">Activo</SelectItem>
                         <SelectItem value="INACTIVO">Inactivo</SelectItem>
                     </SelectGroup>
