@@ -1,15 +1,19 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { createTalentSchema, CreateTalentInput } from '@/lib/validations/talent';
+
+import { createTalentAction } from '@/lib/actions/talent';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LoaderCircle } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface TalentFormProps {
     technicalReferences: { id: number; nombreYApellido: string }[];
@@ -25,9 +29,26 @@ export default function TalentForm({ technicalReferences }: TalentFormProps) {
             estado: 'ACTIVO',
         },
     });
+    const router = useRouter();
 
     const onSubmit = async (data: CreateTalentInput) => {
-        console.log(data);
+        try {
+            const result = await createTalentAction(data);
+            toast.success(result.message);
+            router.push('/talentos');
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else if (typeof error === 'object' && error !== null) {
+                const e = error as { type: string; message: string; errors?: string[] };
+                if (e.type === 'validation') {
+                    toast.error(e.message);
+                    e.errors?.forEach((err) => toast.error(err));
+                } else {
+                    toast.error(e.message);
+                }
+            }
+        }
     };
 
     return (
