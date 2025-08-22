@@ -36,19 +36,22 @@ export async function getAllTalents({
     const where = {
         ...(name ? { nombreYApellido: { contains: name, mode: 'insensitive' as const } } : {}),
         ...(seniority ? { seniority: { equals: seniority, mode: 'insensitive' as const } } : {}),
-        ...(role ? { rol: { equals: role, mode: 'insensitive' as const } } : {}),
+        ...(role ? { rol: { contains: role, mode: 'insensitive' as const } } : {}),
         ...(status ? { estado: status } : {}),
     };
 
-    return prisma.talento.findMany({
-        where,
-        include: talentInclude,
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: {
-            nombreYApellido: sort,
-        },
-    });
+    const [talents, total] = await prisma.$transaction([
+        prisma.talento.findMany({
+            where,
+            include: talentInclude,
+            skip: (page - 1) * limit,
+            take: limit,
+            orderBy: { nombreYApellido: sort },
+        }),
+        prisma.talento.count({ where }),
+    ]);
+
+    return { talents, total };
 }
 
 export async function getTalentById(id: number) {

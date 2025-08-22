@@ -19,12 +19,15 @@ export default function Filters() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [name, setName] = useState(searchParams.get('name') ?? '');
+    const [seniority, setSeniority] = useState(searchParams.get('seniority') ?? '');
+    const [role, setRole] = useState(searchParams.get('role') ?? '');
+    const [status, setStatus] = useState(searchParams.get('status') ?? '');
 
     const handleChange = useCallback(
         (key: string, value: string) => {
             const params = new URLSearchParams(searchParams.toString());
 
-            if (value === 'all' || value === '') {
+            if (!value) {
                 params.delete(key);
             } else {
                 params.set(key, value);
@@ -53,8 +56,12 @@ export default function Filters() {
                 onChange={(e) => setName(e.target.value)}
             />
             <Select
-                value={searchParams.get('seniority') ?? undefined}
-                onValueChange={(value) => handleChange('seniority', value)}
+                value={seniority}
+                onValueChange={(value) => {
+                    const val = value === 'all' ? '' : value;
+                    setSeniority(val);
+                    handleChange('seniority', val);
+                }}
             >
                 <SelectTrigger className="w-full">
                     <SelectValue placeholder="Seniority" />
@@ -64,14 +71,18 @@ export default function Filters() {
                         <SelectLabel>Seniority</SelectLabel>
                         <SelectItem value="all">Todos</SelectItem>
                         <SelectItem value="Junior">Junior</SelectItem>
-                        <SelectItem value="SemiSenior">Semi-Senior</SelectItem>
+                        <SelectItem value="Semi Senior">Semi Senior</SelectItem>
                         <SelectItem value="Senior">Senior</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>
             <Select
-                value={searchParams.get('role') ?? undefined}
-                onValueChange={(value) => handleChange('role', value)}
+                value={role}
+                onValueChange={(value) => {
+                    const val = value === 'all' ? '' : value;
+                    setRole(val);
+                    handleChange('role', val);
+                }}
             >
                 <SelectTrigger className="w-full">
                     <SelectValue placeholder="Rol" />
@@ -80,15 +91,19 @@ export default function Filters() {
                     <SelectGroup>
                         <SelectLabel>Rol</SelectLabel>
                         <SelectItem value="all">Todos</SelectItem>
-                        <SelectItem value="Frontend">Developer</SelectItem>
-                        <SelectItem value="Backend">Designer</SelectItem>
-                        <SelectItem value="Fullstack">QA</SelectItem>
+                        <SelectItem value="Developer">Developer</SelectItem>
+                        <SelectItem value="Designer">Designer</SelectItem>
+                        <SelectItem value="QA">QA</SelectItem>
                     </SelectGroup>
                 </SelectContent>
             </Select>
             <Select
-                value={searchParams.get('status') ?? undefined}
-                onValueChange={(value) => handleChange('status', value)}
+                value={status}
+                onValueChange={(value) => {
+                    const val = value === 'all' ? '' : value;
+                    setStatus(val);
+                    handleChange('status', val);
+                }}
             >
                 <SelectTrigger className="w-full">
                     <SelectValue placeholder="Estado" />
