@@ -1,8 +1,7 @@
 import { TalentType } from '@/types/talent';
 
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Pencil, Trash } from 'lucide-react';
+import TableActionButtons from '@/components/TableActionsButtons';
 
 interface TalentsTableProps {
     talents: TalentType[];
@@ -43,12 +42,7 @@ export default function TalentsTable({ talents }: TalentsTableProps) {
                         <TableCell>{t.mentor?.nombreYApellido || '-'}</TableCell>
                         <TableCell>{t.interacciones.length}</TableCell>
                         <TableCell className="flex gap-2">
-                            <Button size="icon" variant="outline" className="cursor-pointer">
-                                <Pencil />
-                            </Button>
-                            <Button size="icon" variant="destructive" className="cursor-pointer">
-                                <Trash />
-                            </Button>
+                            <TableActionButtons talentId={t.id} talentName={t.nombreYApellido} />
                         </TableCell>
                     </TableRow>
                 ))}
