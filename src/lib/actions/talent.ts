@@ -39,3 +39,29 @@ export const createTalentAction = async (formData: CreateTalentInput) => {
 
     return data;
 };
+
+export const updateTalentByIdAction = async (id: number, formData: CreateTalentInput) => {
+    const res = await fetch(`/api/talentos/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        if (res.status === 400) {
+            throw {
+                type: 'validation',
+                message: data.message || 'Datos inválidos',
+                errors: data.errors || [],
+            };
+        } else {
+            throw new Error(data.message || 'Error al editar un talento');
+        }
+    }
+
+    return data;
+};

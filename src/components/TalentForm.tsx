@@ -5,8 +5,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { createTalentSchema, CreateTalentInput } from '@/lib/validations/talent';
+import { TalentType } from '@/types/talent';
 
-import { createTalentAction } from '@/lib/actions/talent';
+import { createTalentAction, updateTalentByIdAction } from '@/lib/actions/talent';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,23 +18,40 @@ import { toast } from 'sonner';
 
 interface TalentFormProps {
     technicalReferences: { id: number; nombreYApellido: string }[];
+    isEdit?: boolean;
+    selectedTalent?: TalentType;
 }
 
-export default function TalentForm({ technicalReferences }: TalentFormProps) {
+export default function TalentForm({ technicalReferences, isEdit = false, selectedTalent }: TalentFormProps) {
     const form = useForm<CreateTalentInput>({
         resolver: zodResolver(createTalentSchema),
-        defaultValues: {
-            nombreYApellido: '',
-            rol: '',
-            seniority: '',
-            estado: 'ACTIVO',
-        },
+        defaultValues:
+            isEdit && selectedTalent
+                ? {
+                      nombreYApellido: selectedTalent.nombreYApellido,
+                      rol: selectedTalent.rol,
+                      seniority: selectedTalent.seniority,
+                      estado: selectedTalent.estado,
+                      liderId: selectedTalent.liderId ?? undefined,
+                      mentorId: selectedTalent.mentorId ?? undefined,
+                  }
+                : {
+                      nombreYApellido: '',
+                      rol: '',
+                      seniority: '',
+                      estado: 'ACTIVO',
+                  },
     });
     const router = useRouter();
 
     const onSubmit = async (data: CreateTalentInput) => {
+        const action =
+            isEdit && selectedTalent
+                ? () => updateTalentByIdAction(selectedTalent.id, data)
+                : () => createTalentAction(data);
+
         try {
-            const result = await createTalentAction(data);
+            const result = await action();
             toast.success(result.message);
             router.push('/talentos');
         } catch (error) {
@@ -186,9 +204,15 @@ export default function TalentForm({ technicalReferences }: TalentFormProps) {
                     type="submit"
                     form="talent-form"
                     className="cursor-pointer"
-                    disabled={form.formState.isSubmitting}
+                    disabled={form.formState.isSubmitting || !form.formState.isDirty}
                 >
-                    {form.formState.isSubmitting ? <LoaderCircle className="animate-spin" /> : 'Crear Talento'}
+                    {form.formState.isSubmitting ? (
+                        <LoaderCircle className="animate-spin" />
+                    ) : isEdit ? (
+                        'Guardar Cambios'
+                    ) : (
+                        'Crear Talento'
+                    )}
                 </Button>
             </div>
         </Form>
