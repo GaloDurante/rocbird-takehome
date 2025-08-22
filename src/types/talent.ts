@@ -35,5 +35,6 @@ export type TalentType = Prisma.TalentoGetPayload<{
     };
 }>;
 
+// Extremely heavy in forms, search why. Is it because a bug?
 export type CreateTalentInput = Prisma.TalentoCreateInput;
 export type UpdateTalentInput = Prisma.TalentoUpdateInput;

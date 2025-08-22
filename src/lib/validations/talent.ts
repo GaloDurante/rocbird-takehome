@@ -11,3 +11,5 @@ export const createTalentSchema = z.object({
 });
 
 export const updateTalentSchema = createTalentSchema.partial();
+
+export type CreateTalentInput = z.infer<typeof createTalentSchema>;
