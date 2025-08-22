@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
         const role = searchParams.get('rol');
         const status = searchParams.get('estado');
 
-        const talents = await getAllTalents({
+        const { talents, total } = await getAllTalents({
             page: page ? Math.max(1, Number(page)) : undefined,
             limit: limit ? Math.max(1, Number(limit)) : undefined,
             sort: sort === 'desc' ? 'desc' : 'asc',
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
         if (!talents.length) {
             return NextResponse.json({ message: 'No se encontró ningun talento' }, { status: 404 });
         }
-        return NextResponse.json(talents, { status: 200 });
+        return NextResponse.json({ talents, total }, { status: 200 });
     } catch (error) {
         console.error('Error al buscar talentos:', error);
         return NextResponse.json({ message: 'Error interno del servidor' }, { status: 500 });
