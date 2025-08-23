@@ -1,54 +1,45 @@
 import { prisma } from '@/lib/prisma';
 
 async function main() {
-    const lider = await prisma.referenteTecnico.create({
-        data: { nombreYApellido: 'Juan Pérez' },
-    });
-
-    const mentor = await prisma.referenteTecnico.create({
-        data: { nombreYApellido: 'María Gómez' },
-    });
-
-    const talento1 = await prisma.talento.create({
-        data: {
-            nombreYApellido: 'Carlos Sánchez',
-            seniority: 'Junior',
-            rol: 'Backend Developer',
-            estado: 'ACTIVO',
-            liderId: lider.id,
-            mentorId: mentor.id,
-        },
-    });
-
-    const talento2 = await prisma.talento.create({
-        data: {
-            nombreYApellido: 'Ana Torres',
-            seniority: 'Semi Senior',
-            rol: 'Frontend Developer',
-            estado: 'ACTIVO',
-            liderId: lider.id,
-            mentorId: mentor.id,
-        },
-    });
-
-    await prisma.interaccion.createMany({
+    await prisma.referenteTecnico.createMany({
         data: [
-            {
-                tipoDeInteraccion: 'Entrevista Inicial',
-                detalle: 'Primera charla técnica',
-                estado: 'INICIADA',
-                talentoId: talento1.id,
-            },
-            {
-                tipoDeInteraccion: 'Revisión de Proyecto',
-                detalle: 'Evaluación de coding challenge',
-                estado: 'EN_PROGRESO',
-                talentoId: talento2.id,
-            },
+            { nombreYApellido: 'Juan Pérez' },
+            { nombreYApellido: 'María Gómez' },
+            { nombreYApellido: 'Pedro López' },
+            { nombreYApellido: 'Laura Martínez' },
         ],
     });
 
-    console.log('Seed ejecutada correctamente');
+    const referentesDB = await prisma.referenteTecnico.findMany();
+
+    const roles = ['Backend Developer', 'Frontend Developer', 'QA', 'Designer'];
+    const seniorities = ['Junior', 'Semi Senior', 'Senior'];
+
+    const talentosData = Array.from({ length: 20 }).map((_, i) => ({
+        nombreYApellido: `Talento ${i + 1}`,
+        seniority: seniorities[Math.floor(Math.random() * seniorities.length)],
+        rol: roles[Math.floor(Math.random() * roles.length)],
+        liderId: referentesDB[Math.floor(Math.random() * referentesDB.length)].id,
+        mentorId: referentesDB[Math.floor(Math.random() * referentesDB.length)].id,
+    }));
+
+    await prisma.talento.createMany({ data: talentosData });
+
+    const talentosDB = await prisma.talento.findMany();
+
+    const tiposInteraccion = ['Entrevista Inicial', 'Revisión de Proyecto', 'Feedback', 'Onboarding'];
+
+    const interaccionesData = talentosDB.flatMap((talento) =>
+        Array.from({ length: Math.floor(Math.random() * 3) + 1 }).map(() => ({
+            talentoId: talento.id,
+            tipoDeInteraccion: tiposInteraccion[Math.floor(Math.random() * tiposInteraccion.length)],
+            detalle: 'Detalle de ejemplo',
+        })),
+    );
+
+    await prisma.interaccion.createMany({ data: interaccionesData });
+
+    console.log('Seed ejecutada correctamente con 4 referentes, 20 talentos y sus interacciones');
 }
 
 main()
