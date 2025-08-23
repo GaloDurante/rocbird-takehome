@@ -1,78 +1,14 @@
-# Rocbird takehome Fullstack/Heavy backend dev
+## Requisitos Previos
 
-Este proyecto base es un starter kit enfocadao a una herramienta interna para control de staffing de talentos para que puedas demostrar tus habilidades técnicas como fullstack orientado fuertemente a backend con tecnologías modernas.  
-Aquí tendrás que implementar y extender funcionalidades usando **Next.js v15**, **TypeScript**, **Prisma ORM** y una UI base con **shadcn** y **TailwindCSS**.
+- **_Docker_**: Para gestionar los contenedores de la base de datos.
+- **_Node.js_**: Versión 18 o superior.
+- **_Gestor de paquetes_**: Puedes usar npm, pnpm, yarn o bun para instalar las dependencias del proyecto.
 
-El objetivo principal es evaluar la capacidad del postulante para:
+## Instrucciones de Instalación
 
-- Diseñar **APIs limpias** y seguras.
-- Manejar base de datos con Prisma ORM aplicando buenas prácticas.
-- Crear interfaces eficientes, escalables, fuertemente tipadas y correctamente estructuradas.
+**1. Clonar el repositorio**
 
-El tiempo para resolver este takehome será de **7 días** desde el día en el que se comparta el repo para ser clonado.
-
----
-
-## Puntos a resolver
-
-1. **CRUD completo de talentos**
-    - Implementar las operaciones Create, Read, Update y Delete para el modelo `Talento` usando Prisma y exponerlos a través de rutas API de Next.js (App Router).
-    - La UI deberá permitir listar, crear, editar y eliminar talentos.
-    - Usar rutas dinámicas (`app/talentos/[id]`) y soportar query params para filtrado y paginación (`/talentos?page=2&sort=asc`).
-
-2. **Validación y manejo de errores**
-    - Validar tanto en backend como en frontend asegurando tipado estricto entre ambos.
-    - Validar campos requeridos, formatos y devolver códigos HTTP correctos.
-    - Mostrar mensajes claros y amigables para el usuario en la UI (toast, alert).
-
-3. **Consumo eficiente de la base de datos**
-    - Usar `select` / `include` para traer solo datos necesarios.
-    - Evitar N+1 queries con relaciones bien definidas.
-    - Manejar transacciones con `prisma.$transaction` para operaciones múltiples.
-
-4. **Uso de componentes UI reutilizables**
-    - Usar componentes de `shadcn/ui` para formularios, tablas, modales y toasts.
-    - Seguir un patrón consistente de estilos y estructura.
-    - Construir componentes genéricos reutilizables que puedan adaptarse a distintos casos.
-
-5. **Configuración y documentación clara**
-    - Proyecto listo para clonar y correr con instrucciones claras.
-    - Scripts útiles (`db:push`, `db:seed`, `lint`, `format`).
-    - `.env.example` documentado.
-
-6. **Modelado y seed de base de datos**
-    - Levantar una base de datos **PostgreSQL local**.
-    - Conectarla al backend mediante Prisma.
-    - Crear un **seed inicial** que incluya las siguientes tablas y relaciones:
-        - **talento**: Representa a una persona parte del staff.(nombre_y_apellido, seniority, rol, estado ("activo" o "inactivo"), )
-        - **referente_tecnico**: Puede actuar como **líder** y/o **mentor** de uno o varios talentos.
-            - Un talento puede tener **líder** y/o **mentor** (pueden ser la misma persona o distintas).
-            - Un referente técnico puede tener múltiples talentos a cargo (determinar correctamente relaciones uno a muchos, muchos a muchos, etc).
-        - **interaccion**: Registro de interacciones de un talento, generar los tipos correctos para cada columna del schema (tipo_de_interaccion, fecha, detalle, estado, fecha_de_modificacion) y vincularlas correctamente al talento.
-            - Un talento puede tener múltiples interacciones.
-            - El estado de la intearccion puede actualizarse desde el front ("Iniciada", "En Progreso", "Finalizada")
-            - Documentar el esquema y sus relaciones en el README o en `prisma/schema.prisma`.
-
----
-
-## Puntos extra (opcionales):
-
-- Utilizar Docker.
-- Testing unitario de funcionalidades críticas.
-
----
-
-## Instalar los paquetes necesarios
-
-````bash
-npm install
-# or
-pnpm install
-# or
-yarn install
-
-
-## Instalar los paquetes necesarios:
+**2. Instalar dependencias**
 
 ```bash
 npm install
@@ -80,20 +16,93 @@ npm install
 pnpm install
 # or
 yarn install
-````
-
-## Ejecutar entorno
-
-Ejecutar el server dev:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Abre [http://localhost:3000] en tu navegador para ver el resultado.
+**3. Configurar variables de entorno**
+
+Copia el archivo de ejemplo `.env.example`, renómbralo a `.env`, y completa los valores con la información de tu base de datos.
+
+```bash
+DATABASE_URL="postgresql://[user]:[password]@localhost:5432/[db_name]?schema=publi
+c"
+
+### POSTGRES_USER=
+
+### POSTGRES_PASSWORD=
+
+### POSTGRES_DB=
+```
+
+**Nota:** Las variables `POSTGRES_USER`, `POSTGRES_PASSWORD` y `POSTGRES_DB` son utilizadas por el archivo _docker-compose.yml_.
+
+## Levantar la Base de Datos
+
+Utiliza Docker Compose para crear y levantar la base de datos en un contenedor.
+
+**1. Crear y levantar el contenedor**
+
+> docker compose up -d
+
+**2. Generar el cliente de Prisma**
+
+> npm run db:generate
+
+**3. Crear las tablas**
+
+> npm run db:push
+
+**4. Poblar la base de datos**
+
+> npm run db:seed
+
+**5. Visualizar la base de datos (opcional)**
+
+> npm run db:studio
+
+## Ejecutar el Proyecto
+
+Una vez que la base de datos esté lista, puedes iniciar el servidor de desarrollo.
+
+> npm run dev
+
+Abre tu navegador y visita la siguiente dirección para ver el proyecto en acción:
+
+[http://localhost:3000.](http://localhost:3000.)
+
+## Estructura y Funcionalidades
+
+**Backend**
+
+El backend está construido con una **API RESTful** que maneja las operaciones CRUD para la entidad **Talento**.
+
+- **_Rutas_**: Se encuentran en la carpeta `app/api/talentos`.
+- **_Validación_**: Manejo de errores y validación estricta con códigos HTTP apropiados.
+- **_Eficiencia_**: Uso de _select/include_ en Prisma para optimizar las consultas a la base de datos.
+
+**Frontend**
+
+El frontend ofrece una interfaz de usuario completa para interactuar con la **_API_**.
+
+- **_Rutas_**: Las rutas se encuentran en la ubicación `src/app/talentos`
+- **_Componentes_**: Los archivos se ubican en `src/components`.
+- **_Diseño_**: La UI está basada en shadcn/ui y TailwindCSS
+
+## Funcionalidades Extras
+
+Se han añadido funcionalidades adicionales para mejorar la calidad del proyecto.
+
+- **_Tests unitarios_**: Cobertura de **_tests_** para todas las rutas de la API.
+- **_Documentación de la API_**: Se incluyó una documentación completa de cada ruta de la API en `Postman`
+- **_Alternar tema_**: Incluye un botón para cambiar entre `Dark mode` y `Light mode` usando la biblioteca _next-themes_.
+
+## Test unitarios
+
+Se crearon **tests unitarios** de todas las rutas de la API y se encuentran en `src/__tests__/api/talents`. Para verificar que los tests se encuentran funcionando, correr el siguiente comando en consola:
+
+> npm run test
+
+## Documentación en Postman
+
+- Archivo **_JSON_** disponible en la carpeta `docs` en la raiz del proyecto.
+- Importar este archivo en la app `Postman`.
+- Visualizar la carpeta con todos los endpoints y cada uno con su documentación.
